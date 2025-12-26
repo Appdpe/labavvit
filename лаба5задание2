@@ -1,0 +1,43 @@
+class Circle:
+    """
+    Класс, представляющий круг.
+    Атрибуты:
+    - radius: радиус круга
+    """
+    
+    def __init__(self, radius):
+        """
+        Конструктор класса Circle.
+        Инициализирует радиус круга.
+        """
+        self.radius = radius
+    
+    def get_radius(self):
+        """
+        Возвращает значение радиуса круга.
+        """
+        return self.radius
+    
+    def set_radius(self, new_radius):
+        """
+        Устанавливает новое значение радиуса круга.
+        """
+        self.radius = new_radius
+    
+    def get_area(self):
+        """
+        Возвращает площадь круга (дополнительный метод).
+        """
+        import math
+        return math.pi * (self.radius ** 2)
+    
+    def get_circumference(self):
+        """
+        Возвращает длину окружности (дополнительный метод).
+        """
+        import math
+        return 2 * math.pi * self.radius
+    
+    def __str__(self):
+        """Строковое представление объекта."""
+        return f"Круг с радиусом {self.radius}"
