@@ -1,27 +1,74 @@
 class Book:
-    """
-    Класс, представляющий книгу.
-    Атрибуты:
-    - title: название книги
-    - author: автор книги
-    - year: год издания
-    """
-    
-    def __init__(self, title, author, year):
+    def init(self, title, author, year):
         """
-        Конструктор класса Book.
-        Инициализирует атрибуты книги.
+        Конструктор класса Book
+        
+        Параметры:
+        title (str): название книги
+        author (str): автор книги
+        year (int): год издания
         """
-        self.title = title
-        self.author = author
-        self.year = year
+        self.title = title    # название книги
+        self.author = author  # автор книги
+        self.year = year      # год издания
     
     def get_info(self):
         """
-        Возвращает информацию о книге в формате строки.
+        Метод возвращает информацию о книге в формате:
+        "Название книги: [title], Автор: [author], Год издания: [year]"
         """
         return f"Название книги: {self.title}, Автор: {self.author}, Год издания: {self.year}"
+
+
+# Демонстрация работы класса
+if name == "main":
+    print("=" * 70)
+    print("Лабораторная работа №5, Задание 1: Класс Book")
+    print("=" * 70)
     
-    def __str__(self):
-        """Строковое представление объекта."""
-        return self.get_info()
+    print("\n1. Создание объектов класса Book:")
+    print("-" * 40)
+    
+    # Создаем несколько объектов-книг
+    book1 = Book("Мастер и Маргарита", "Михаил Булгаков", 1966)
+    book2 = Book("Преступление и наказание", "Федор Достоевский", 1866)
+    book3 = Book("1984", "Джордж Оруэлл", 1949)
+    book4 = Book("Гарри Поттер и философский камень", "Джоан Роулинг", 1997)
+    
+    # Выводим информацию о каждой книге
+    books = [book1, book2, book3, book4]
+    
+    for i, book in enumerate(books, 1):
+        print(f"{i}. {book.get_info()}")
+    
+    print("\n2. Проверка работы отдельных объектов:")
+    print("-" * 40)
+    
+    # Детальная проверка одного объекта
+    test_book = Book("Война и мир", "Лев Толстой", 1869)
+    
+    print("Проверка атрибутов объекта:")
+    print(f"  Название: {test_book.title}")
+    print(f"  Автор: {test_book.author}")
+    print(f"  Год: {test_book.year}")
+    
+    print("\nПроверка метода get_info():")
+    print(f"  {test_book.get_info()}")
+    
+    print("\n3. Изменение атрибутов объекта:")
+    print("-" * 40)
+    
+    # Меняем атрибуты и проверяем метод get_info()
+    print("Исходная книга:")
+    print(f"  {test_book.get_info()}")
+    
+    # Изменяем атрибуты
+    test_book.title = "Анна Каренина"
+    test_book.author = "Л.Н. Толстой"
+    test_book.year = 1877
+    
+    print("\nПосле изменения атрибутов:")
+    print(f"  {test_book.get_info()}")
+    
+    print("\n4. Создание книги с пользовательским вводом:")
+    print("-" * 40)
