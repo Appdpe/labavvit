@@ -1,0 +1,12 @@
+import math
+from datetime import datetime
+
+# Использование модуля math
+number = 25
+sqrt_result = math.sqrt(number)
+print(f"Квадратный корень из {number} = {sqrt_result}")
+
+# Использование модуля datetime
+current_datetime = datetime.now()
+formatted_date = current_datetime.strftime("%d.%m.%Y %H:%M:%S")
+print(f"Текущая дата и время: {formatted_date}")
