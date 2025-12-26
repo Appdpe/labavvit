@@ -1,0 +1,27 @@
+class Book:
+    """
+    Класс, представляющий книгу.
+    Атрибуты:
+    - title: название книги
+    - author: автор книги
+    - year: год издания
+    """
+    
+    def __init__(self, title, author, year):
+        """
+        Конструктор класса Book.
+        Инициализирует атрибуты книги.
+        """
+        self.title = title
+        self.author = author
+        self.year = year
+    
+    def get_info(self):
+        """
+        Возвращает информацию о книге в формате строки.
+        """
+        return f"Название книги: {self.title}, Автор: {self.author}, Год издания: {self.year}"
+    
+    def __str__(self):
+        """Строковое представление объекта."""
+        return self.get_info()
