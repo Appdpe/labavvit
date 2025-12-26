@@ -1,0 +1,133 @@
+class Vehicle:
+    """
+    Базовый класс для транспортных средств.
+    """
+    
+initinit(self, make, model):
+        """
+        Конструктор класса Vehicle.
+        
+        Args:
+            make (str): Марка транспортного средства
+            model (str): Модель транспортного средства
+        """
+        self.make = make
+        self.model = model
+    
+    def get_info(self):
+        """
+        Возвращает информацию о транспортном средстве.
+        
+        Returns:
+            str: Информация о ТС
+        """
+        return f"Марка: {self.make}, Модель: {self.model}"
+    
+    def start_engine(self):
+        """
+        Запускает двигатель (базовый метод).
+        
+        Returns:
+            str: Сообщение о запуске
+        """
+        return "Двигатель запущен"
+    
+str str(self):
+        """Строковое представление транспортного средства."""
+        return self.get_info()
+
+
+class Car(Vehicle):
+    """
+    Класс автомобиля, наследующий от Vehicle.
+    Демонстрирует наследование и полиморфизм.
+    """
+    
+initinit(self, make, model, fuel_type):
+        """
+        Конструктор класса Car.
+        
+        Args:
+            make (str): Марка автомобиля
+            model (str): Модель автомобиля
+            fuel_type (str): Тип топлива
+        """
+        initinit(make, model)  # Вызов конструктора родительского класса
+        self.fuel_type = fuel_type
+    
+    def get_info(self):
+        """
+        Переопределенный метод get_info.
+Добавляет информацию о типе топлива.
+        
+        Returns:
+            str: Расширенная информация об автомобиле
+        """
+        base_info = super().get_info()  # Получаем базовую информацию
+        return f"{base_info}, Тип топлива: {self.fuel_type}"
+    
+    def start_engine(self):
+        """
+        Переопределенный метод запуска двигателя.
+        Добавляет специфичное для автомобиля поведение.
+        
+        Returns:
+            str: Сообщение о запуске автомобиля
+        """
+        base_message = super().start_engine()
+        return f"{base_message}. Автомобиль готов к движению."
+    
+    def honk(self):
+        """
+        Уникальный метод класса Car.
+        
+        Returns:
+            str: Звук сигнала
+        """
+        return "Би-бип!"
+
+
+class Motorcycle(Vehicle):
+    """
+    Класс мотоцикла, наследующий от Vehicle.
+    Демонстрирует альтернативную реализацию.
+    """
+    
+    def init(self, make, model, engine_volume):
+        """
+        Конструктор класса Motorcycle.
+        
+        Args:
+            make (str): Марка мотоцикла
+            model (str): Модель мотоцикла
+            engine_volume (int): Объем двигателя в куб.см
+        """
+        super().init(make, model)
+        self.engine_volume = engine_volume
+    
+    def get_info(self):
+        """
+        Переопределенный метод get_info.
+        
+        Returns:
+            str: Информация о мотоцикле
+        """
+        return f"{super().get_info()}, Объем двигателя: {self.engine_volume}cc"
+    
+    def start_engine(self):
+        """
+        Переопределенный метод запуска двигателя.
+        
+        Returns:
+            str: Сообщение о запуске мотоцикла
+        """
+        return "Мотоцикл заведен. Надевайте шлем!"
+    
+    def wheelie(self):
+        """
+        Уникальный метод класса Motorcycle.
+        
+        Returns:
+            str: Сообщение о выполнении трюка
+        """
+        return "Выезд на заднем колесе!"
