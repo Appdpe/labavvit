@@ -1,569 +1,105 @@
-print("=" * 90)
-print("Лабораторная работа №7: Работа с классами ч.3")
-print("Система управления сотрудниками с множественным наследованием")
-print("=" * 90)
 
-print("\n" + "=" * 40)
-print("1. БАЗОВЫЙ КЛАСС: Employee")
-print("=" * 40)
-
+#Базовый класс Employee
 class Employee:
-    """
-    Базовый класс для всех сотрудников.
-    Инкапсуляция: защищенные атрибуты с использованием свойств (property).
-    """
-    
-    def init(self, name, employee_id, salary):
-        """
-        Конструктор базового класса Employee.
-        
-        Args:
-            name (str): Имя сотрудника
-            employee_id (str/str): Уникальный идентификатор сотрудника
-            salary (float): Зарплата сотрудника
-        """
-        self._name = name  # Защищенный атрибут
-        self._employee_id = employee_id
-        self._salary = salary
-        self._department = "Общий"  # Департамент по умолчанию
-    
-    @property
-    def name(self):
-        """Getter для имени сотрудника."""
-        return self._name
-    
-    @name.setter
-    def name(self, value):
-        """Setter для имени с валидацией."""
-        if not value or not isinstance(value, str):
-            raise ValueError("Имя должно быть непустой строкой")
-        self._name = value
-    
-    @property
-    def employee_id(self):
-        """Getter для ID сотрудника."""
-        return self._employee_id
-    
-    @property
-    def salary(self):
-        """Getter для зарплаты."""
-        return self._salary
-    
-    @salary.setter
-    def salary(self, value):
-        """Setter для зарплаты с валидацией."""
-        if not isinstance(value, (int, float)) or value < 0:
-            raise ValueError("Зарплата должна быть положительным числом")
-        self._salary = value
-    
-    @property
-    def department(self):
-        """Getter для департамента."""
-        return self._department
-    
-    @department.setter
-    def department(self, value):
-        """Setter для департамента."""
-        self._department = value
+    def init(self, name, emp_id):
+        self.name = name
+        self.id = emp_id
     
     def get_info(self):
-        """
-        Возвращает базовую информацию о сотруднике.
-        
-        Returns:
-            str: Форматированная информация
-        """
-        return f"Сотрудник: {self._name}, ID: {self._employee_id}, Департамент: {self._department}, Зарплата: {self._salary:,.2f} ₽"
-    
-    def work(self):
-        """
-        Базовый метод работы сотрудника.
-        
-        Returns:
-            str: Сообщение о работе
-        """
-        return f"{self._name} выполняет свои обязанности"
-    
-    def calculate_bonus(self, performance_rating):
-        """
-        Рассчитывает бонус на основе рейтинга производительности.
-        
-        Args:
-            performance_rating (float): Рейтинг от 0.0 до 1.0
-            
-        Returns:
-            float: Размер бонуса
-        """
-        if not 0.0 <= performance_rating <= 1.0:
-            raise ValueError("Рейтинг должен быть между 0.0 и 1.0")
-        
-        base_bonus = self._salary * 0.1  # Базовый бонус 10%
-        performance_bonus = self._salary * 0.05 * performance_rating
-        return base_bonus + performance_bonus
-    
-    def str(self):
-        """Строковое представление сотрудника."""
-        return f"Employee[{self._employee_id}]: {self._name}"
-    
-    def repr(self):
-        """Официальное строковое представление."""
-        return f"Employee(name='{self._name}', id='{self._employee_id}', salary={self._salary})"
+        return f"Сотрудник: {self.name}, ID: {self.id}"
 
-print("\n" + "=" * 40)
-print("2. КЛАСС: Manager (наследует Employee)")
-print("=" * 40)
+
+#Класс Manager
 class Manager(Employee):
-    """
-    Класс менеджера.
-    Наследует от Employee, добавляет управленческие функции.
-    """
+    def init(self, name, emp_id, department):
+        super().init(name, emp_id)
+        self.department = department
+        self.team = []  # список подчиненных
     
-    def init(self, name, employee_id, salary, department):
-        """
-        Конструктор класса Manager.
-        
-        Args:
-            name (str): Имя менеджера
-            employee_id (str): ID менеджера
-            salary (float): Зарплата
-            department (str): Управляемый департамент
-        """
-        super().init(name, employee_id, salary)
-        self.department = department  # Используем setter из Employee
-        self._managed_projects = []
-        self._subordinates = []  # Список подчиненных
-    
-    @property
-    def managed_projects(self):
-        """Список управляемых проектов."""
-        return self._managed_projects.copy()  # Возвращаем копию для защиты
-    
-    @property
-    def subordinates_count(self):
-        """Количество подчиненных."""
-        return len(self._subordinates)
+    def get_info(self):
+        base_info = super().get_info()
+        return f"{base_info}, Отдел: {self.department}"
     
     def manage_project(self, project_name):
-        """
-        Управление проектом.
-        
-        Args:
-            project_name (str): Название проекта
-            
-        Returns:
-            str: Сообщение о начале управления
-        """
-        if project_name not in self._managed_projects:
-            self._managed_projects.append(project_name)
-        
         return f"Менеджер {self.name} управляет проектом '{project_name}'"
     
-    def add_subordinate(self, employee):
-        """
-        Добавляет подчиненного сотрудника.
-        
-        Args:
-            employee (Employee): Объект сотрудника
-            
-        Returns:
-            str: Сообщение о добавлении
-        """
-        if not isinstance(employee, Employee):
-            raise TypeError("Подчиненный должен быть экземпляром Employee")
-        
-        if employee not in self._subordinates:
-            self._subordinates.append(employee)
-            return f"Сотрудник {employee.name} добавлен в подчинение к {self.name}"
-        else:
-            return f"Сотрудник {employee.name} уже в подчинении у {self.name}"
-    
-    def remove_subordinate(self, employee_id):
-        """
-        Удаляет подчиненного по ID.
-        
-        Args:
-            employee_id (str): ID сотрудника
-            
-        Returns:
-            str: Сообщение об удалении
-        """
-        for i, subordinate in enumerate(self._subordinates):
-            if subordinate.employee_id == employee_id:
-                removed = self._subordinates.pop(i)
-                return f"Сотрудник {removed.name} удален из подчинения"
-        
-        return f"Сотрудник с ID {employee_id} не найден в подчинении"
-    
-    def list_subordinates(self):
-        """
-        Возвращает список подчиненных.
-        
-        Returns:
-            list: Список подчиненных сотрудников
-        """
-        return self._subordinates.copy()  # Защищенная копия
-
-    def get_info(self):
-        """
-        Переопределенный метод get_info.
-        Добавляет информацию о менеджерских обязанностях.
-        """
-        base_info = super().get_info()
-        projects_info = f", Управляет проектами: {len(self._managed_projects)}"
-        subordinates_info = f", Подчиненных: {self.subordinates_count}"
-        return base_info + projects_info + subordinates_info
-    
-    def work(self):
-        """
-        Переопределенный метод работы.
-        """
-        return f"Менеджер {self.name} управляет департаментом '{self.department}'"
-    
-    def calculate_bonus(self, performance_rating):
-        """
-        Переопределенный метод расчета бонуса.
-Менеджеры получают увеличенный бонус.
-        """
-        base_bonus = super().calculate_bonus(performance_rating)
-        management_bonus = self.salary * 0.05 * (self.subordinates_count / 10)  # Дополнительный бонус за подчиненных
-        return base_bonus + management_bonus
-    
-    def str(self):
-        """Строковое представление менеджера."""
-        return f"Manager[{self.employee_id}]: {self.name} (Департамент: {self.department})"
-
-
-print("\n" + "=" * 40)
-print("3. КЛАСС: Technician (наследует Employee)")
-print("=" * 40)
-
-class Technician(Employee):
-    """
-    Класс технического специалиста.
-    Наследует от Employee, добавляет технические функции.
-    """
-    
-    def init(self, name, employee_id, salary, specialization):
-        """
-        Конструктор класса Technician.
-        
-        Args:
-            name (str): Имя специалиста
-            employee_id (str): ID специалиста
-            salary (float): Зарплата
-            specialization (str): Специализация
-        """
-        super().init(name, employee_id, salary)
-        self._specialization = specialization
-        self._certifications = []
-        self._tools = []
-        self._completed_tasks = 0
-    
-
-    @property
-    def specialization(self):
-        """Специализация техника."""
-        return self._specialization
-    
-    @property
-    def certifications(self):
-        """Сертификаты техника."""
-        return self._certifications.copy()
-    
-    @property
-    def completed_tasks(self):
-        """Количество выполненных задач."""
-        return self._completed_tasks
-
-    def perform_maintenance(self, equipment):
-        """
-        Выполнение технического обслуживания.
-        
-        Args:
-            equipment (str): Название оборудования
-            
-        Returns:
-            str: Сообщение о выполнении обслуживания
-        """
-        self._completed_tasks += 1
-        return f"Техник {self.name} выполняет обслуживание {equipment}"
-    
-    def add_certification(self, certification):
-        """
-        Добавляет сертификат.
-        
-        Args:
-            certification (str): Название сертификата
-            
-        Returns:
-            str: Сообщение о добавлении
-        """
-        if certification not in self._certifications:
-            self._certifications.append(certification)
-            return f"Сертификат '{certification}' добавлен"
-        return f"Сертификат '{certification}' уже есть"
-    
-    def add_tool(self, tool):
-        """
-        Добавляет инструмент.
-        
-        Args:
-            tool (str): Название инструмента
-        """
-        if tool not in self._tools:
-            self._tools.append(tool)
-    
-    def has_tool(self, tool):
-        """
-        Проверяет наличие инструмента.
-        
-        Args:
-            tool (str): Название инструмента
-            
-        Returns:
-            bool: True если инструмент есть
-        """
-        return tool in self._tools
-    
-    def get_info(self):
-        """
-        Переопределенный метод get_info.
-        """
-        base_info = super().get_info()
-        specialization_info = f", Специализация: {self._specialization}"
-        certifications_info = f", Сертификатов: {len(self._certifications)}"
-        tasks_info = f", Выполнено задач: {self._completed_tasks}"
-        return base_info + specialization_info + certifications_info + tasks_info
-    
-    def work(self):
-        """
-        Переопределенный метод работы.
-        """
-        return f"Техник {self.name} выполняет технические задачи по специализации '{self._specialization}'"
-    
-    def calculate_bonus(self, performance_rating):
-"""
-        Переопределенный метод расчета бонуса.
-        Техники получают бонус за выполненные задачи.
-        """
-        base_bonus = super().calculate_bonus(performance_rating)
-        task_bonus = self.salary * 0.01 * min(self._completed_tasks / 10, 1.0)  # Бонус за задачи, максимум 1% от зарплаты
-        return base_bonus + task_bonus
-    
-    def str(self):
-        """Строковое представление техника."""
-        return f"Technician[{self.employee_id}]: {self.name} ({self._specialization})"
-
-
-print("\n" + "=" * 40)
-print("4. КЛАСС: TechManager (наследует Manager и Technician)")
-print("   МНОЖЕСТВЕННОЕ НАСЛЕДОВАНИЕ")
-print("=" * 40)
-
-class TechManager(Manager, Technician):
-    """
-    Класс технического менеджера.
-    Множественное наследование: наследует от Manager и Technician.
-    Комбинирует управленческие и технические навыки.
-    """
-    
-    def init(self, name, employee_id, salary, department, specialization):
-        """
-        Конструктор класса TechManager.
-        
-        Args:
-            name (str): Имя технического менеджера
-            employee_id (str): ID
-            salary (float): Зарплата
-            department (str): Управляемый департамент
-            specialization (str): Техническая специализация
-        """
-        # Вызываем конструкторы обоих родительских классов
-        Employee.init(self, name, employee_id, salary)  # Прямой вызов конструктора Employee
-        self.department = department
-        self._specialization = specialization
-        
-        # Инициализируем атрибуты Manager
-        self._managed_projects = []
-        self._subordinates = []
-        
-        # Инициализируем атрибуты Technician
-        self._certifications = []
-        self._tools = []
-        self._completed_tasks = 0
-        
-        # Уникальные атрибуты TechManager
-        self._technical_team = []
-    
     def add_employee(self, employee):
-        """
-        Метод для добавления сотрудника в список подчиненных.
-        Расширяет функциональность Manager.add_subordinate.
-        
-        Args:
-            employee (Employee): Объект сотрудника
-            
-        Returns:
-            str: Результат добавления
-        """
-        # Используем метод из Manager
-        result = super().add_subordinate(employee)
-        
-        # Дополнительная логика для технического менеджера
-        if isinstance(employee, Technician):
-            self._technical_team.append(employee)
-            return f"{result}. Добавлен в техническую команду."
-        
-        return result
+        """Добавление сотрудника в команду"""
+        self.team.append(employee)
+        return f"Сотрудник {employee.name} добавлен в команду {self.name}"
     
     def get_team_info(self):
-        """
-        Выводит информацию о всех подчиненных сотрудниках.
+        """Информация о всех подчиненных"""
+        if not self.team:
+            return f"У менеджера {self.name} нет подчиненных"
         
-        Returns:
-            str: Форматированная информация о команде
-        """
-        if not self._subordinates:
-            return f"У {self.name} нет подчиненных"
-        
-        result = [f"\nКоманда технического менеджера {self.name} ({self.department}):"]
-        result.append(f"Всего сотрудников: {len(self._subordinates)}")
-        result.append("-" * 50)
-        
-        # Группируем по типам
-        managers = []
-        technicians = []
-        others = []
-        
-        for emp in self._subordinates:
-            if isinstance(emp, Manager):
-                managers.append(emp)
-            elif isinstance(emp, Technician):
-                technicians.append(emp)
-            else:
-                others.append(emp)
-        
-        # Выводим информацию по группам
-        if managers:
-            result.append("\nМенеджеры:")
-            for mgr in managers:
-                result.append(f"  • {mgr.name} (ID: {mgr.employee_id})")
-        
-        if technicians:
-            result.append("\nТехнические специалисты:")
-for tech in technicians:
-                result.append(f"  • {tech.name} - {tech.specialization} (ID: {tech.employee_id})")
-        
-        if others:
-            result.append("\nДругие сотрудники:")
-            for emp in others:
-                result.append(f"  • {emp.name} (ID: {emp.employee_id})")
-        
-        # Техническая команда
-        if self._technical_team:
-            result.append(f"\nТехническая команда: {len(self._technical_team)} специалистов")
-        
-        return "\n".join(result)
-    
-    def conduct_technical_review(self):
-        """
-        Проводит технический обзор команды.
-        Уникальный метод TechManager.
-        
-        Returns:
-            str: Результат обзора
-        """
-        if not self._technical_team:
-            return "Нет технической команды для проведения обзора"
-        
-        result = [f"Технический обзор команды {self.department}:"]
-        total_tasks = sum(tech.completed_tasks for tech in self._technical_team)
-        avg_tasks = total_tasks / len(self._technical_team) if self._technical_team else 0
-        
-        result.append(f"Всего специалистов: {len(self._technical_team)}")
-        result.append(f"Всего выполнено задач: {total_tasks}")
-        result.append(f"Среднее задач на специалиста: {avg_tasks:.1f}")
-        
-        # Анализ сертификатов
-        all_certs = []
-        for tech in self._technical_team:
-            all_certs.extend(tech.certifications)
-        
-        if all_certs:
-            unique_certs = set(all_certs)
-            result.append(f"Уникальных сертификатов в команде: {len(unique_certs)}")
-        
-        return "\n".join(result)
-    
-    def manage_technical_project(self, project_name, technical_requirements):
-        """
-        Управление техническим проектом.
-        Комбинирует управленческие и технические навыки.
-        
-        Args:
-            project_name (str): Название проекта
-            technical_requirements (list): Список технических требований
-            
-        Returns:
-            str: Сообщение о начале проекта
-        """
-        # Управленческая часть
-        self.manage_project(project_name)
-        
-        # Техническая часть
-        req_info = ", ".join(technical_requirements[:3])  # Показываем первые 3 требования
-        if len(technical_requirements) > 3:
-            req_info += f" и еще {len(technical_requirements) - 3}"
-        
-        return f"TechManager {self.name} управляет техническим проектом '{project_name}' " \
-               f"с требованиями: {req_info}"
-    
+        info = f"Команда менеджера {self.name}:\n"
+        for emp in self.team:
+            info += f"  - {emp.get_info()}\n"
+        return info
 
+
+#Класс Technician
+class Technician(Employee):
+    def init(self, name, emp_id, specialization):
+        super().init(name, emp_id)
+        self.specialization = specialization
+    
     def get_info(self):
-        """
-        Комбинированный метод get_info.
-        """
-        base_info = Employee.get_info(self)  # Прямой вызов метода Employee
-        mgr_info = f", Управляет проектами: {len(self._managed_projects)}"
-        tech_info = f", Специализация: {self._specialization}"
-        team_info = f", Размер команды: {len(self._subordinates)}"
-        return base_info + mgr_info + tech_info + team_info
+        base_info = super().get_info()
+        return f"{base_info}, Специализация: {self.specialization}"
     
-    def work(self):
-        """
-        Комбинированный метод работы.
-        """
-        return f"Технический менеджер {self.name} управляет департаментом '{self.department}' " \
-               f"и обеспечивает техническое руководство по '{self._specialization}'"
-    
-    def calculate_bonus(self, performance_rating):
-        """
-        Комбинированный метод расчета бонуса.
-        TechManager получает бонусы и от Manager, и от Technician.
-        """
-        # Получаем бонус от Employee (через Manager, так как он первый в MRO)
-        base_bonus = Manager.calculate_bonus(self, performance_rating)
-        
-        # Добавляем технический бонус
-        if hasattr(self, '_completed_tasks'):
-            tech_bonus = self.salary * 0.01 * min(self._completed_tasks / 10, 1.0)
-base_bonus += tech_bonus
-        
-        # Дополнительный бонус за техническое руководство
-        tech_lead_bonus = self.salary * 0.03
-        
-        return base_bonus + tech_lead_bonus
-    
-    def str(self):
-        """Строковое представление TechManager."""
-        return f"TechManager[{self.employee_id}]: {self.name} (Департамент: {self.department}, " \
-               f"Специализация: {self._specialization})"
+    def perform_maintenance(self):
+        return f"Техник {self.name} выполняет техническое обслуживание"
 
-print("\n" + "=" * 90)
-print("ДЕМОНСТРАЦИЯ СИСТЕМЫ УПРАВЛЕНИЯ СОТРУДНИКАМИ")
-print("=" * 90)
 
-# Создаем сотрудников разных типов
-print("\n" + "=" * 40)
-print("СОЗДАНИЕ СОТРУДНИКОВ")
-print("=" * 40)
+#Класс TechManager с множественным наследованием
+class TechManager(Manager, Technician):
+    def init(self, name, emp_id, department, specialization):
+        # Инициализация через Manager (первый родительский класс)
+        Manager.init(self, name, emp_id, department)
+        # Инициализация атрибута от Technician
+        self.specialization = specialization
+    
+    def get_info(self):
+        """Переопределение метода с информацией от обоих классов"""
+        return f"Технический менеджер: {self.name}, ID: {self.id}, " \
+               f"Отдел: {self.department}, Специализация: {self.specialization}"
+    
+    def manage_technical_project(self, project_name):
+        """Комбинированный метод"""
+        return f"Технический менеджер {self.name} управляет техническим проектом '{project_name}'"
+
+
+#Демонстрация работы классов
+if name == "main":
+    # Создание объектов
+    emp1 = Employee("Иван Иванов", "EMP001")
+    mgr1 = Manager("Анна Петрова", "MGR001", "IT")
+    tech1 = Technician("Сергей Сидоров", "TECH001", "Сетевое оборудование")
+    tech_mgr = TechManager("Ольга Козлова", "TM001", "Разработка", "Python")
+    
+    #Проверка методов
+    print("1. Информация о сотрудниках:")
+    print(emp1.get_info())
+    print(mgr1.get_info())
+    print(tech1.get_info())
+    print(tech_mgr.get_info())
+    print()
+    
+    print("2. Работа с командой менеджера:")
+    mgr1.add_employee(emp1)
+    mgr1.add_employee(tech1)
+    print(mgr1.get_team_info())
+    print()
+    
+    print("3. Методы TechManager:")
+    print(tech_mgr.manage_project("Разработка ПО"))
+    print(tech_mgr.perform_maintenance())
+    print(tech_mgr.manage_technical_project("Миграция системы"))
+    print()
+    
+    print("4. Полиморфизм:")
+    employees = [emp1, mgr1, tech1, tech_mgr]
+    for emp in employees:
+        print(emp.get_info())
