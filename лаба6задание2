@@ -1,133 +1,71 @@
+# Базовый класс Vehicle
 class Vehicle:
-    """
-    Базовый класс для транспортных средств.
-    """
-    
-initinit(self, make, model):
-        """
-        Конструктор класса Vehicle.
-        
-        Args:
-            make (str): Марка транспортного средства
-            model (str): Модель транспортного средства
-        """
-        self.make = make
-        self.model = model
+    def init(self, make, model):
+        self.make = make  # марка
+        self.model = model  # модель
     
     def get_info(self):
-        """
-        Возвращает информацию о транспортном средстве.
-        
-        Returns:
-            str: Информация о ТС
-        """
-        return f"Марка: {self.make}, Модель: {self.model}"
-    
-    def start_engine(self):
-        """
-        Запускает двигатель (базовый метод).
-        
-        Returns:
-            str: Сообщение о запуске
-        """
-        return "Двигатель запущен"
-    
-str str(self):
-        """Строковое представление транспортного средства."""
-        return self.get_info()
+        """Метод возвращает информацию о транспортном средстве"""
+        return f"Транспортное средство: {self.make} {self.model}"
 
 
+# Класс Car, наследующий от Vehicle
 class Car(Vehicle):
-    """
-    Класс автомобиля, наследующий от Vehicle.
-    Демонстрирует наследование и полиморфизм.
-    """
-    
-initinit(self, make, model, fuel_type):
-        """
-        Конструктор класса Car.
-        
-        Args:
-            make (str): Марка автомобиля
-            model (str): Модель автомобиля
-            fuel_type (str): Тип топлива
-        """
-        initinit(make, model)  # Вызов конструктора родительского класса
-        self.fuel_type = fuel_type
-    
-    def get_info(self):
-        """
-        Переопределенный метод get_info.
-Добавляет информацию о типе топлива.
-        
-        Returns:
-            str: Расширенная информация об автомобиле
-        """
-        base_info = super().get_info()  # Получаем базовую информацию
-        return f"{base_info}, Тип топлива: {self.fuel_type}"
-    
-    def start_engine(self):
-        """
-        Переопределенный метод запуска двигателя.
-        Добавляет специфичное для автомобиля поведение.
-        
-        Returns:
-            str: Сообщение о запуске автомобиля
-        """
-        base_message = super().start_engine()
-        return f"{base_message}. Автомобиль готов к движению."
-    
-    def honk(self):
-        """
-        Уникальный метод класса Car.
-        
-        Returns:
-            str: Звук сигнала
-        """
-        return "Би-бип!"
-
-
-class Motorcycle(Vehicle):
-    """
-    Класс мотоцикла, наследующий от Vehicle.
-    Демонстрирует альтернативную реализацию.
-    """
-    
-    def init(self, make, model, engine_volume):
-        """
-        Конструктор класса Motorcycle.
-        
-        Args:
-            make (str): Марка мотоцикла
-            model (str): Модель мотоцикла
-            engine_volume (int): Объем двигателя в куб.см
-        """
+    def init(self, make, model, fuel_type):
+        # Вызов конструктора родительского класса
         super().init(make, model)
-        self.engine_volume = engine_volume
+        self.fuel_type = fuel_type  # тип топлива
     
     def get_info(self):
-        """
-        Переопределенный метод get_info.
-        
-        Returns:
-            str: Информация о мотоцикле
-        """
-        return f"{super().get_info()}, Объем двигателя: {self.engine_volume}cc"
+        """Переопределение метода get_info() с добавлением информации о топливе"""
+        # Используем метод родительского класса и добавляем свою информацию
+        base_info = super().get_info()
+        return f"{base_info}, Тип топлива: {self.fuel_type}"
+
+
+# Тестирование классов
+if name == "main":
+    print("=" * 60)
+    print("Лабораторная работа №6, Задание 2: Полиморфизм и наследование")
+    print("=" * 60)
     
-    def start_engine(self):
-        """
-        Переопределенный метод запуска двигателя.
-        
-        Returns:
-            str: Сообщение о запуске мотоцикла
-        """
-        return "Мотоцикл заведен. Надевайте шлем!"
+    print("\n1. Создание объектов:")
+    print("-" * 40)
     
-    def wheelie(self):
-        """
-        Уникальный метод класса Motorcycle.
-        
-        Returns:
-            str: Сообщение о выполнении трюка
-        """
-        return "Выезд на заднем колесе!"
+    # Создание объекта базового класса Vehicle
+    vehicle = Vehicle("Производитель", "Модель")
+    print(f"Базовый класс: {vehicle.get_info()}")
+    
+    # Создание объектов класса Car (наследник)
+    car1 = Car("Toyota", "Camry", "Бензин")
+    car2 = Car("Tesla", "Model 3", "Электричество")
+    
+    print(f"Автомобиль 1: {car1.get_info()}")
+    print(f"Автомобиль 2: {car2.get_info()}")
+    
+    print("\n2. Демонстрация полиморфизма:")
+    print("-" * 40)
+    
+    # Создаем список разных транспортных средств
+    vehicles = [
+        Vehicle("Generic", "Vehicle"),
+        Car("BMW", "X5", "Дизель"),
+        Car("Nissan", "Leaf", "Электричество"),
+        Vehicle("Марка", "Модель")
+    ]
+    
+    # Все объекты имеют метод get_info(), но результат разный
+    for i, vehicle in enumerate(vehicles, 1):
+        print(f"{i}. {vehicle.get_info()}")
+    
+    print("\n3. Проверка наследования:")
+    print("-" * 40)
+    
+    # Проверяем, что Car действительно наследует от Vehicle
+    print(f"car1 является экземпляром Car: {isinstance(car1, Car)}")
+    print(f"car1 является экземпляром Vehicle: {isinstance(car1, Vehicle)}")
+    print(f"Vehicle является родителем Car: {issubclass(Car, Vehicle)}")
+    
+    print("\n" + "=" * 60)
+    print("Задание выполнено!")
+    print("=" * 60)
