@@ -1,66 +1,21 @@
 class UserAccount:
-    """
-    Класс для представления аккаунта пользователя с защищенными данными.
-    Инкапсуляция: пароль хранится как приватный атрибут.
-    """
-    
-    def __init__(self, username, email, password):
-        """
-        Конструктор класса UserAccount.
-        
-        Args:
-            username (str): Имя пользователя
-            email (str): Электронная почта
-            password (str): Пароль пользователя
-        """
+    def init(self, username, email, password):
         self.username = username
         self.email = email
-        self.__password = password  # Приватный атрибут
+        self.__password = password  # приватный атрибут
     
     def set_password(self, new_password):
-        """
-        Безопасно изменяет пароль аккаунта.
-        
-        Args:
-            new_password (str): Новый пароль
-            
-        Returns:
-            bool: True если пароль изменен, False если пароль слишком короткий
-        """
-        if len(new_password) < 6:
-            print("Ошибка: Пароль должен содержать минимум 6 символов")
-            return False
-        
-        if new_password == self.__password:
-            print("Ошибка: Новый пароль не должен совпадать со старым")
-            return False
-        
-        self.__password = new_password
-        print("Пароль успешно изменен")
-        return True
+        """Безопасное изменение пароля"""
+        if len(new_password) >= 6:
+            self.__password = new_password
+            return "Пароль успешно изменен"
+        else:
+            return "Ошибка: пароль должен содержать не менее 6 символов"
     
-    def check_password(self, password_to_check):
-        """
-        Проверяет, соответствует ли введенный пароль текущему паролю.
-        
-        Args:
-            password_to_check (str): Пароль для проверки
-            
-        Returns:
-            bool: True если пароли совпадают, иначе False
-        """
-        return password_to_check == self.__password
+    def check_password(self, password):
+        """Проверка соответствия пароля"""
+        return password == self.__password
     
-    def get_account_info(self):
-        """
-        Возвращает публичную информацию об аккаунте.
-        Пароль не включается в вывод.
-        
-        Returns:
-            str: Информация об аккаунте
-        """
+    def get_info(self):
+        """Получение информации о пользователе (без пароля)"""
         return f"Пользователь: {self.username}, Email: {self.email}"
-    
-    def __str__(self):
-        """Строковое представление аккаунта (без пароля)."""
-        return self.get_account_info()
